@@ -1,4 +1,8 @@
 @extends('layouts.master')
+@section('title')
+لوحة التحكم - الرئيسية
+
+@endsection
 @section('css')
 <!--  Owl-carousel css-->
 <link href="{{URL::asset('assets/plugins/owl-carousel/owl.carousel.css')}}" rel="stylesheet" />
@@ -65,28 +69,7 @@
 							<span id="compositeline2" class="pt-1">&nbsp;</span>
 						</div>
 					</div>
-					<div class="col-xl-12 col-lg-12 col-md-12 col-xm-12">
-						<div class="card overflow-hidden sales-card bg-success-gradient">
-							<div class="pl-3 pt-3 pr-3 pb-2 pt-0">
-								<div class="">
-									<h6 class="mb-3 tx-12 text-white">عدد المواد الدراسية</h6>
-								</div>
-								<div class="pb-0 mt-0">
-									<div class="d-flex">
-										<div class="">
-											<h4 class="tx-20 font-weight-bold mb-1 text-white">{{App\Models\Subject::count()}}</h4>
-											<p class="mb-0 tx-12 text-white op-7">&nbsp;</p>
-										</div>
-										<span class="float-right my-auto mr-auto">
-											<i class="fas fa-arrow-circle-up text-white"></i>
-											<span class="text-white op-7"> 100%</span>
-										</span>
-									</div>
-								</div>
-							</div>
-							<span id="compositeline3" class="pt-1">&nbsp;</span>
-						</div>
-					</div>
+
 
 				</div>
 				<!-- row closed -->
@@ -144,6 +127,32 @@
 						</div>
 					</div>
 
+                </div>
+
+
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-xm-12">
+						<div class="card overflow-hidden sales-card bg-success-gradient">
+							<div class="pl-3 pt-3 pr-3 pb-2 pt-0">
+								<div class="">
+									<h6 class="mb-3 tx-12 text-white">عدد المواد الدراسية</h6>
+								</div>
+								<div class="pb-0 mt-0">
+									<div class="d-flex">
+										<div class="">
+											<h4 class="tx-20 font-weight-bold mb-1 text-white">{{App\Models\Subject::count()}}</h4>
+											<p class="mb-0 tx-12 text-white op-7">&nbsp;</p>
+										</div>
+										<span class="float-right my-auto mr-auto">
+											<i class="fas fa-arrow-circle-up text-white"></i>
+											<span class="text-white op-7"> 100%</span>
+										</span>
+									</div>
+								</div>
+							</div>
+							<span id="compositeline3" class="pt-1">&nbsp;</span>
+						</div>
+					</div>
                 </div>
 
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Level;
 use App\Models\Semester;
 use App\Models\Section;
 use Illuminate\Http\Request;
@@ -13,7 +14,8 @@ class SemesterController extends Controller
     {
         $sections = Section::all();
         $semesters = Semester::all();
-        return view('Pages.semesters.semesters' , compact('sections' , 'semesters'));
+        $levels = Level::all();
+        return view('Pages.semesters.semesters' , compact('levels','sections' , 'semesters'));
     }
 
 
@@ -21,7 +23,7 @@ class SemesterController extends Controller
     public function store(Request $request)
     {
         $this->validate($request , [
-            'name' => 'required|min:3|max:70 |unique:sections,name,'.$request->id,
+            'name' => 'required|min:3|max:70 ',
        ]);
       Semester::create($request->all());
       $notification = array(
@@ -39,7 +41,7 @@ class SemesterController extends Controller
     public function update(Request $request)
     {
         $this->validate($request , [
-            'name' => 'required|min:3|max:70 |unique:sections,name',
+            'name' => 'required|min:3|max:70 |unique:semesters,name,'.$request->id,
        ]);
       Semester::findOrFail($request->id)->update($request->all());
      $notification = array(
@@ -54,9 +56,9 @@ class SemesterController extends Controller
     {
         $id = $request->id;
       $data =   Semester::findOrFail($id)->Subjects()->get();
-  
+
         if ( count($data) > 0 ) {
-       
+
           return redirect()-> route('semesters.index')->with('error','عفوا لا يمكن حذف القسم لانه يحتوي علي مواد دراسية');
         }else{
             Semester::findOrFail($request->id)->delete();

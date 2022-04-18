@@ -1,4 +1,8 @@
 @extends('layouts.master')
+@section('title')
+لوحة التحكم - المرفقات الدراسية
+
+@endsection
 @section('css')
     <!-- Internal Data table css -->
     <link href="{{ URL::asset('assets/plugins/datatable/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet" />
@@ -71,9 +75,9 @@
 
                                         <td>
 
-                                            <a  class="btn btn-sm btn-primary" href="{{ route('view_file', ['subject'=> $attachemnt -> Subjects -> name , 'source' => $attachemnt -> source]) }}" title="عرض"><i class="fa fa-eye"> </i> عرض </a>
+                                            <a  class="btn btn-sm btn-primary" href="{{ route('view_file', ['subject'=> $attachemnt -> Subjects -> id , 'source' => $attachemnt -> source]) }}" title="عرض"><i class="fa fa-eye"> </i> عرض </a>
 
-                                            <a  class="btn btn-sm btn-success"href="{{ route('download_file', ['subject'=> $attachemnt -> Subjects -> name , 'source' => $attachemnt -> source]) }} " title="تحميل"><i class="fa fa-download"> </i> تحميل </a>
+                                            <a  class="btn btn-sm btn-success"href="{{ route('download_file', ['subject'=> $attachemnt -> Subjects -> id , 'source' => $attachemnt -> source]) }} " title="تحميل"><i class="fa fa-download"> </i> تحميل </a>
 
                                         {{-- <a class=" btn btn-sm btn-success"  href="{{ url('view_file/'. $attachemnt->soucre ) }}" title="تحميل"><i
                                                 class="las la-download">تحميل</i> </a> --}}
@@ -118,9 +122,7 @@
                         <input type="file"  class="form-control" id="image" name="source"   value="{{ $attachemnt->source }}" required>
                     </div>
 
-                    <div class="form-group">
-                        <img src="{{ asset('assets/img/faces/1.jpg')}}" style="width: 100px" class="img-thumbnail image-preview" alt="">
-                    </div>
+
 
                     <div class="form-group">
                         <label for="inputName" class="control-label">القسم</label>
@@ -236,9 +238,7 @@
 
                         </div>
 
-                        <div class="form-group">
-        <img src="{{ asset('') }}" style="width: 100px" class="img-thumbnail image-preview" alt="">
-    </div>
+
 
                         <div class="form-group">
                             <label for="inputName" class="control-label">القسم</label>
@@ -258,26 +258,29 @@
 
                         </div>
 
+                        <div class="from-group">
+
+                            <label for="inputName" class="control-label">المستوى الدراسي</label>
+                            <select id="level_id" name="level_id" class="form-control" required>
+
+                            </select>
+
+                    </div>
+
                         <div class="form-group">
                             <label for="inputName" class="control-label">الفصل الدراسي</label>
                             <select id="semester_id" name="semester_id" class="form-control">
-                                <option value="{{ $semester_id ?? ' الفصل' }} " selected disabled>
-                                    {{ $semester_name ?? 'الفصل الدراسي  ' }}</option>
+
                             </select>
                         </div>
 
                         <div class="form-group">
                             <label for="exampleInputEmail1"> المادة</label>
-                        {{-- <select name="section_id" class="form-control"> --}}
 
                             <select id="subject_id" name="subject_id" class="form-control">
-                                <option value="{{ $subject_id ?? ' المادة' }} " selected disabled>
-                                    {{ $subject_name ?? 'المادة' }}</option>
+
                             </select>
-                            {{-- @foreach ($subjects as $subject)
-                            <option value="{{ $subject -> id }}">{{ $subject ->name }}</option>
-                            @endforeach
-                        </select> --}}
+
                          </div>
 
 
@@ -330,9 +333,9 @@
                         type: "GET",
                         dataType: "json",
                         success: function(data) {
-                            $('select[name="semester_id"]').empty();
+                            $('select[name="level_id"]').empty();
                             $.each(data, function(key, value) {
-                                $('select[name="semester_id"]').append(
+                                $('select[name="level_id"]').append(
                                     '<option value="' +
                                     key + '">' + value + '</option>');
                             });
@@ -347,17 +350,39 @@
 
 <script>
     $(document).ready(function() {
-        //click
-        $('select[name="semester_id"]').on('click', function() {
-            var semesterId = $(this).val();
-
-            if (semesterId) {
+        $('select[name="level_id"]').on('click', function() {
+            var levelID = $(this).val();
+            if (levelID) {
                 $.ajax({
-                    url: "{{ URL::to('attach') }}/" + semesterId,
+                    url: "{{ URL::to('semester') }}/" + levelID,
                     type: "GET",
                     dataType: "json",
                     success: function(data) {
+                        $('select[name="semester_id"]').empty();
+                        $.each(data, function(key, value) {
+                            $('select[name="semester_id"]').append(
+                                '<option value="' +
+                                key + '">' + value + '</option>');
+                        });
+                    },
+                });
+            } else {
+                console.log('AJAX load did not work');
+            }
+        });
+    });
+</script>
 
+<script>
+    $(document).ready(function() {
+        $('select[name="semester_id"]').on('click', function() {
+            var semesterID = $(this).val();
+            if (semesterID) {
+                $.ajax({
+                    url: "{{ URL::to('subject') }}/" + semesterID,
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
                         $('select[name="subject_id"]').empty();
                         $.each(data, function(key, value) {
                             $('select[name="subject_id"]').append(
@@ -372,24 +397,5 @@
         });
     });
 </script>
-
-
-<script>
-
-    $("#image").change(function () {
-
-        if (this.files && this.files[0]) {
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-                $('.image-preview').attr('src', e.target.result);
-            }
-
-            reader.readAsDataURL(this.files[0]);
-        }
-
-    });
-     </script>
-
 
 @endsection

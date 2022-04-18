@@ -20,6 +20,12 @@ class Section extends Model
      }
 
      // relation between and semesters
+     public function Levels()
+     {
+         return $this->hasMany(Level::class);
+     }
+
+     // relation between and semesters
      public function Subjects()
      {
          return $this->hasMany(Subject::class);

@@ -1,4 +1,8 @@
 @extends('layouts.master')
+@section('title')
+لوحة التحكم - الفصول الدراسية
+
+@endsection
 @section('css')
     <!-- Internal Data table css -->
     <link href="{{ URL::asset('assets/plugins/datatable/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet" />
@@ -53,6 +57,7 @@
                                 <tr>
                                     <th class="border-bottom-0">#</th>
                                     <th class="border-bottom-0">  الفصل الدراسي</th>
+                                    <th class="border-bottom-0">  المستوي الدراسي</th>
                                     <th class="border-bottom-0">   القسم</th>
                                     <th class="border-bottom-0">  العمليات</th>
 
@@ -65,6 +70,7 @@
                                     <tr>
                                         <td>{{ $i++ }}</td>
                                         <td>{{$semester -> name}}</td>
+                                        <td>{{$semester -> Levels -> name}}</td>
                                         <td>{{$semester -> Sections -> name}}</td>
 
                                         <td>
@@ -102,15 +108,26 @@
                         <input type="text" class="form-control" id="name" name="name" value="{{ $semester->name }}">
                     </div>
 
+
                     <div class="form-group">
                         <label for="exampleInputEmail1"> القسم</label>
                     <select name="section_id" class="form-control">
-                        <option value="{{$semester -> Sections -> id}}"> {{$semester -> Sections -> name}}</option>
+                        <option value="{{$semester -> Sections -> id}}" selected disabled> {{$semester -> Sections -> name}}</option>
                         @foreach ($sections as $section)
                         <option value="{{ $section -> id }}">{{ $section ->name }}</option>
                         @endforeach
                     </select>
                      </div>
+
+                    <div class="form-group">
+                        <label for="exampleInputEmail1"> المستوى الدراسي</label>
+                    <select name="level_id" class="form-control">
+                        <option value="{{$semester -> Levels -> id}}" selected  disabled > {{$semester -> Levels -> name}} </option>
+
+                    </select>
+                     </div>
+
+
 
 
             </div>
@@ -183,14 +200,28 @@
                             <input type="text" class="form-control" id="name" name="name" required>
                         </div>
 
+
                         <div class="form-group">
-                            <label for="exampleInputEmail1"> القسم</label>
-                        <select name="section_id" class="form-control">
-                            @foreach ($sections as $section)
-                            <option value="{{ $section -> id }}">{{ $section ->name }}</option>
-                            @endforeach
-                        </select>
-                         </div>
+                            <label for="exampleInputEmail1">القسم </label>
+                            <select name="section_id" id="grade_id" class="form-control SlectBox"
+                                onclick="console.log($(this).val())" onchange="console.log('change is firing')">
+                                <!--placeholder-->
+                                <option value="" selected disabled>حدد القسم</option>
+                                @foreach ($sections as $section)
+                                    <option value="{{ $section->id }}"> {{ $section->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="from-group">
+                            <label for="inputName" class="control-label">المستوى الدراسي</label>
+                            <select id="level_id" name="level_id" class="form-control" required>
+
+                            </select>
+                    </div>
+
+
+
 
 
                         <div class="modal-footer">
@@ -231,4 +262,29 @@
     <!--Internal  Datatable js -->
     <script src="{{ URL::asset('assets/js/table-data.js') }}"></script>
     <script src="{{ URL::asset('assets/js/modal.js') }}"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('select[name="section_id"]').on('change', function() {
+                var SectionId = $(this).val();
+                if (SectionId) {
+                    $.ajax({
+                        url: "{{ URL::to('section') }}/" + SectionId,
+                        type: "GET",
+                        dataType: "json",
+                        success: function(data) {
+                            $('select[name="level_id"]').empty();
+                            $.each(data, function(key, value) {
+                                $('select[name="level_id"]').append(
+                                    '<option value="' +
+                                    key + '">' + value + '</option>');
+                            });
+                        },
+                    });
+                } else {
+                    console.log('AJAX load did not work');
+                }
+            });
+        });
+    </script>
 @endsection

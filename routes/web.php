@@ -28,6 +28,10 @@ Route::prefix('dashboard')->middleware('auth')->group(function(){
     //attachemnts routes
 Route::resource('attachments', App\Http\Controllers\AttachmentsController::class);
 
+    //levels routes
+    Route::resource('levels', App\Http\Controllers\LevelController::class);
+
+
 //sections routes
 Route::resource('sections', App\Http\Controllers\SectionController::class);
 
@@ -53,9 +57,13 @@ Route::post('change', 'App\Http\Controllers\HomeController@change')->name('chang
 // others routes
 Route::get('/user_get_Attach/{id}', 'App\Http\Controllers\Front\MainController@getAttach')->name('user_get_Attach');
 Route::post('user_search_subjects', 'App\Http\Controllers\Front\MainController@search_subjects')->name('user_search_subjects');
+// get all levels & semesters to subject page
+Route::get('/section/{id}', 'App\Http\Controllers\SubjectController@getLevels');
+Route::get('/semester/{id}', 'App\Http\Controllers\SubjectController@getSemesters');
+Route::get('/subject/{id}', 'App\Http\Controllers\AttachmentsController@getSubjects');
 
-Route::get('/section/{id}', 'App\Http\Controllers\SubjectController@getsemesters');
-Route::get('/attach/{id}', 'App\Http\Controllers\AttachmentsController@getSubjects');
+
+// Route::get('/attach/{id}', 'App\Http\Controllers\AttachmentsController@getSubjects');
 
 Route::get('/view_file/{subject}/{source}', 'App\Http\Controllers\AttachmentsController@show_file')->name('view_file');
 Route::get('/download_file/{subject}/{source}', 'App\Http\Controllers\AttachmentsController@download_file')->name('download_file');

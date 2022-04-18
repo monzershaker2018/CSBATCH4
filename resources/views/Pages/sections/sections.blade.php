@@ -1,4 +1,8 @@
     @extends('layouts.master')
+    @section('title')
+لوحة التحكم - الأقسام الدراسية
+
+@endsection
     @section('css')
         <!-- Internal Data table css -->
         <link href="{{ URL::asset('assets/plugins/datatable/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet" />

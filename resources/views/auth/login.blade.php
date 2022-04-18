@@ -157,8 +157,19 @@ small {
 
 
                     <div class="container">
+
                         <div class="row d-flex justify-content-center mt-5">
+
                             <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                                @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
                                 <div class="card py-3 px-2">
 
                                     <div class="division">

@@ -9,7 +9,7 @@ use App\Models\Subject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\File; 
+use Illuminate\Support\Facades\File;
 class AttachmentsController extends Controller
 {
 
@@ -36,8 +36,8 @@ class AttachmentsController extends Controller
    ]);
 
    // $subject = DB::table('subjects')->where('id', $request-> subject_id)->select("name")->first();
-   $subject  = Subject::find( $request->subject_id)->pluck('name')->first(); 
-    
+   $subject  = Subject::find( $request->subject_id)->pluck('id')->first();
+
       //save image
        $file_ex = $request->source->getClientOriginalExtension();
         $file_name = time() .'.'. $file_ex;
@@ -69,14 +69,19 @@ return redirect()-> route('attachments.index')->with($notification);
             'source' => 'required|min:3|max:255',
        ]);
 
-                //save image
-            $file_ex = $request->source->getClientOriginalExtension();
-            $file_name = time() .'.'. $file_ex;
-            $path = 'images/Attachments';
-            $request->source->move($path,$file_name);
+
+   // $subject = DB::table('subjects')->where('id', $request-> subject_id)->select("name")->first();
+   $subject  = Subject::find( $request->subject_id)->pluck('id')->first();
+
+   //save image
+    $file_ex = $request->source->getClientOriginalExtension();
+     $file_name = time() .'.'. $file_ex;
+  $path = 'images/Attachments/' .  $subject . '/' ;
+   $request->source->move($path,$file_name);
+
 
             //insert to db
-            Attachment::create([
+            Attachment::find($request->id)->update([
                 'name' => $request->name,
                     'source' => $file_name,
                     'subject_id' => $request->subject_id,
@@ -96,10 +101,10 @@ return redirect()-> route('attachments.index')->with($notification);
          $attch =   Attachment::findOrFail($request->id);
           $file  = $attch->pluck('source')->first();
           $subject_id  = $attch->pluck('subject_id')->first();
-           $folder  = Subject::find( $subject_id)->pluck('name')->first(); 
+           $folder  = Subject::find( $subject_id)->pluck('id')->first();
            $path = 'images/Attachments/' . $folder . '/' . $file ;
            if (File::exists($path)) File::delete($path);
-        
+
       Attachment::findOrFail($request->id)->delete();
         $notification = array(
             'message' => 'تم حذف البيانات بنجاح',

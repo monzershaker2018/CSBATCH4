@@ -64,9 +64,9 @@
 
                                         <td>
 
-                                            <a  class="btn btn-sm btn-primary" href="{{ route('view_file', ['subject'=> $attachemnt -> Subjects -> name , 'source' => $attachemnt -> source]) }}" title="عرض"><i class="fa fa-eye"> </i> عرض </a>
+                                            <a  class="btn btn-sm btn-primary" href="{{ route('view_file', ['subject'=> $attachemnt -> Subjects -> id , 'source' => $attachemnt -> source]) }}" title="عرض"><i class="fa fa-eye"> </i> عرض </a>
 
-                                            <a  class="btn btn-sm btn-success"href="{{ route('download_file', ['subject'=> $attachemnt -> Subjects -> name , 'source' => $attachemnt -> source]) }} " title="تحميل"><i class="fa fa-download"> </i> تحميل </a>
+                                            <a  class="btn btn-sm btn-success"href="{{ route('download_file', ['subject'=> $attachemnt -> Subjects -> id , 'source' => $attachemnt -> source]) }} " title="تحميل"><i class="fa fa-download"> </i> تحميل </a>
 
                                         </td>
                                     </tr>

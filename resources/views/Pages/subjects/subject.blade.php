@@ -1,4 +1,8 @@
 @extends('layouts.master')
+@section('title')
+لوحة التحكم - المواد الدراسية
+
+@endsection
 @section('css')
     <!-- Internal Data table css -->
     <link href="{{ URL::asset('assets/plugins/datatable/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet" />
@@ -58,7 +62,7 @@
 
                             <div class="col">
                                 <label for="inputName" class="control-label">القسم</label>
-                                <select name="section_id" id="section_id" class="form-control SlectBox"
+                                <select name="section_id" id="section_id" class="form-control SlectBox" required
                                     onclick="console.log($(this).val())" onchange="console.log('change is firing')">
                                     <!--placeholder-->
 
@@ -74,8 +78,21 @@
                             </div>
 
                             <div class="col">
+                                <label for="inputName" class="control-label">المستوى الدراسي</label>
+                                <select id="level_id" name="level_id" class="form-control" required>
+                                    <option value="{{ $level_id ?? ' المستوي' }} " selected disabled>
+                                        {{ $level_name ?? 'المستوي الدراسي  ' }}</option>
+                                </select>
+                            </div>
+
+
+
+                        </div>
+                        <div class="row">
+
+                            <div class="col">
                                 <label for="inputName" class="control-label">الفصل الدراسي</label>
-                                <select id="semester_id" name="semester_id" class="form-control">
+                                <select id="semester_id" name="semester_id" class="form-control" required>
                                     <option value="{{ $semester_id ?? ' الفصل' }} " selected disabled>
                                         {{ $semester_name ?? 'الفصل الدراسي  ' }}</option>
                                 </select>
@@ -86,7 +103,6 @@
                                 <button class="form-control" type="submit"
                                     style="background-color: #3577f1;color:#fff">بحث</button>
                             </div>
-
                         </div>
                 </div>
 
@@ -130,10 +146,10 @@
                                             <td>
                                                 <a  class="modal-effect btn btn-sm btn-info"  data-effect="effect-scale"
                                                 data-toggle="modal" href="#edit{{ $subject->id }}"  title="تعديل"><i class="fa fa-edit"> </i> تعديل </a>
-    
+
                                                 <a  class="modal-effect btn btn-sm btn-danger"  data-effect="effect-scale"
                                                 data-toggle="modal" href="#delete{{ $subject->id }}"  title="حذف"><i class="fa fa-trash"> </i> حذف </a>
-    
+
                                             </td>
                                             <td></td>
                                         </tr>
@@ -179,6 +195,17 @@
                                                                     @endforeach
                                                                 </select>
                                                             </div>
+
+                                                            <div class="from-group">
+
+                                                                <label for="inputName" class="control-label">المستوى الدراسي</label>
+                                                                <select id="level_id" name="level_id" class="form-control" required>
+                                                                    <option value="{{ $subject->Levels->id }}" selected >
+                                                                        {{ $subject->Levels->name }}</option>
+                                                                </select>
+
+                                                        </div>
+
                                                             <div class="form-group">
                                                                 <label for="exampleInputEmail1"> الفصل الدراسي</label>
 
@@ -286,6 +313,15 @@
                                             @endforeach
                                         </select>
                                     </div>
+
+                                    <div class="from-group">
+                                            <label for="inputName" class="control-label">المستوى الدراسي</label>
+                                            <select id="level_id" name="level_id" class="form-control" required>
+
+                                            </select>
+                                    </div>
+
+
                                     <div class="form-group">
                                         <label for="exampleInputEmail1"> الفصل الدراسي</label>
 
@@ -368,9 +404,9 @@
                         type: "GET",
                         dataType: "json",
                         success: function(data) {
-                            $('select[name="semester_id"]').empty();
+                            $('select[name="level_id"]').empty();
                             $.each(data, function(key, value) {
-                                $('select[name="semester_id"]').append(
+                                $('select[name="level_id"]').append(
                                     '<option value="' +
                                     key + '">' + value + '</option>');
                             });
@@ -382,4 +418,29 @@
             });
         });
     </script>
+
+<script>
+    $(document).ready(function() {
+        $('select[name="level_id"]').on('click', function() {
+            var levelID = $(this).val();
+            if (levelID) {
+                $.ajax({
+                    url: "{{ URL::to('semester') }}/" + levelID,
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        $('select[name="semester_id"]').empty();
+                        $.each(data, function(key, value) {
+                            $('select[name="semester_id"]').append(
+                                '<option value="' +
+                                key + '">' + value + '</option>');
+                        });
+                    },
+                });
+            } else {
+                console.log('AJAX load did not work');
+            }
+        });
+    });
+</script>
 @endsection

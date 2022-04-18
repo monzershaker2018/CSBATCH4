@@ -12,11 +12,19 @@ class Semester extends Model
     protected $guarded = [];
 
 
-    // relation between semesters and sections
-    public function Sections()
-    {
-        return $this->belongsTo( Section::class , 'section_id' , 'id');
-    }
+
+
+      // relation between semesters and sections
+      public function Levels()
+      {
+          return $this->belongsTo( Level::class , 'level_id' , 'id');
+      }
+
+       // relation between semesters and sections
+       public function Sections()
+       {
+           return $this->belongsTo( Section::class , 'section_id' , 'id');
+       }
 
     // relation between Semester and subjects
     public function Subjects()

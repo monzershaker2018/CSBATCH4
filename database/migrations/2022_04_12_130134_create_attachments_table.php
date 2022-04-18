@@ -18,7 +18,7 @@ class CreateAttachmentsTable extends Migration
             $table->String('name');
             $table->String('source');
             $table->unsignedBigInteger('subject_id');
-            $table->foreign('subject_id')->references('id')->on('subjects')->onDelete('cascade');
+            $table->foreign('subject_id')->references('id')->on('subjects')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }
